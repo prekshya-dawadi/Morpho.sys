@@ -1,33 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { GripVertical } from 'lucide-react';
 
 const ProposalGeneration = () => {
   const [message, setMessage] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [splitPosition, setSplitPosition] = useState(50); // Default 50%
   
+  // Handle mouse down on divider
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  // Handle mouse move for dragging
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging) return;
+    
+    const container = e.currentTarget;
+    const containerRect = container.getBoundingClientRect();
+    const newPosition = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+    
+    // Limit the split position between 20% and 80%
+    const limitedPosition = Math.min(Math.max(newPosition, 20), 80);
+    setSplitPosition(limitedPosition);
+  }, [isDragging]);
+
+  // Handle mouse up to stop dragging
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
   const demoProposal = {
     title: "Project Proposal: Digital Literacy for Rural Women in Nepal",
     submittedTo: "The Asia Foundation",
     date: "January 2, 2025",
-    executive_summary: "This 18-month project aims to empower 5,000 rural women in three districts of Nepal through digital literacy training and economic inclusion. Through established partnerships with local organizations and government bodies, the project will create sustainable digital hubs, provide skills training, and facilitate access to digital financial services. The total budget requested is $275,000.",
-    sections: [
-      {
-        title: "1. Organization Background",
-        content: "Digital Nepal Network (DNN) is a registered non-profit organization established in 2018, focusing on digital inclusion and technology education. We have successfully implemented similar projects with UNDP and World Bank, reaching 12,000 beneficiaries across Nepal."
-      },
-      {
-        title: "2. Problem Statement",
-        content: "In rural Nepal, only 18% of women have access to digital technologies, compared to 45% of men. This digital gender gap significantly impacts women's economic participation and access to essential services. Our baseline survey in target districts shows:\n• 82% of rural women lack basic digital skills\n• 65% have no access to digital financial services\n• 73% are unable to access online government services"
-      }
-      // Additional sections can be added here
-    ]
+    executive_summary: "This 18-month project aims to empower 5,000 rural women in three districts of Nepal through digital literacy training and economic inclusion. Through established partnerships with local organizations and government bodies, the project will create sustainable digital hubs, provide skills training, and facilitate access to digital financial services. The total budget requested is $275,000."
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div 
+      className="flex h-screen relative"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
       {/* Left Panel - Chat Interface */}
-      <div className="w-1/2 flex flex-col p-4">
+      <div 
+        className="flex flex-col p-4 overflow-hidden"
+        style={{ width: `${splitPosition}%` }}
+      >
         <div className="flex items-center mb-6">
-          <h1 className="text-xl font-bold">morpho.sys</h1>
-          <span className="ml-2 text-gray-500">Asia Foundation Proposal</span>
+          <span className="text-gray-500">Asia Foundation Proposal</span>
         </div>
         
         <div className="flex-1 bg-white rounded-lg shadow-md p-6 mb-4 overflow-y-auto">
@@ -62,8 +85,25 @@ const ProposalGeneration = () => {
         </div>
       </div>
 
+      {/* Draggable Divider */}
+      <div
+        className={`absolute top-0 cursor-col-resize select-none h-full w-6 transform -translate-x-1/2 group
+          ${isDragging ? 'z-50' : 'z-40'}`}
+        style={{ left: `${splitPosition}%` }}
+        onMouseDown={handleMouseDown}
+      >
+        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-2 rounded-full 
+          bg-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+          <GripVertical className="w-4 h-4 text-gray-500" />
+        </div>
+        <div className="absolute left-1/2 w-px h-full bg-gray-200 transform -translate-x-1/2" />
+      </div>
+
       {/* Right Panel - Proposal Preview */}
-      <div className="w-1/2 p-4 bg-white overflow-y-auto">
+      <div 
+        className="p-4 bg-white overflow-y-auto"
+        style={{ width: `${100 - splitPosition}%` }}
+      >
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">{demoProposal.title}</h2>
           <p className="mb-2">Submitted to: {demoProposal.submittedTo}</p>
@@ -71,13 +111,6 @@ const ProposalGeneration = () => {
           
           <h3 className="text-xl font-bold mb-2">Executive Summary</h3>
           <p className="mb-6">{demoProposal.executive_summary}</p>
-          
-          {demoProposal.sections.map((section, index) => (
-            <div key={index} className="mb-6">
-              <h3 className="text-xl font-bold mb-2">{section.title}</h3>
-              <p className="whitespace-pre-line">{section.content}</p>
-            </div>
-          ))}
         </div>
       </div>
     </div>
