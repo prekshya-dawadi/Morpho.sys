@@ -44,7 +44,7 @@ export default function Layout({ children }) {
             <li>
               <Link href="/settings" className={`flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100
                 ${isExpanded ? 'space-x-3' : 'justify-center'}`}>
-                <Settings className="w-5 h-5" />
+                <Settings className="w-5 h-5"  />
                 {isExpanded && <span>Settings</span>}
               </Link>
             </li>

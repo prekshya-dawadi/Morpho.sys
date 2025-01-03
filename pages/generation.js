@@ -50,6 +50,7 @@ const ProposalGeneration = () => {
         style={{ width: `${splitPosition}%` }}
       >
         <div className="flex items-center mb-6">
+          <span className="mr-6 text-2xl font-semibold text-gray-800">Morpho.Sys</span>
           <span className="text-gray-500">Asia Foundation Proposal</span>
         </div>
         
@@ -117,4 +118,4 @@ const ProposalGeneration = () => {
   );
 };
 
-export default ProposalGeneration;
+export default ProposalGeneration;  
