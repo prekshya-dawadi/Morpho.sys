@@ -1,52 +1,125 @@
-import React, { useState, useCallback } from 'react';
+// ProposalGeneration.js
+import React, { useState, useCallback, useEffect } from 'react';
 import { GripVertical } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { debounce } from 'lodash';
+import proposalTemplate from '../json/proposal-template.json'; // Adjust path accordingly
+import responses from '../json/responses.json'; // Import responses.json
+
+const PDFContent = dynamic(
+  () => import('../components/PdfContent'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full flex items-center justify-center">
+        Loading PDF viewer...
+      </div>
+    )
+  }
+);
+
+const Message = ({ content, isUser }) => (
+  <div className={`mb-4 ${isUser ? 'bg-gray-50' : 'bg-white'} rounded-lg p-4`}>
+    <p>{content}</p>
+  </div>
+);
 
 const ProposalGeneration = () => {
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [isDragging, setIsDragging] = useState(false);
-  const [splitPosition, setSplitPosition] = useState(50); // Default 50%
-  
-  // Handle mouse down on divider
+  const [splitPosition, setSplitPosition] = useState(50);
+  const [pdfKey, setPdfKey] = useState(0);
+  const [proposalData, setProposalData] = useState(null);
+
+  const debouncedPDFUpdate = useCallback(
+    debounce(() => {
+      setPdfKey(prev => prev + 1);
+    }, 100),
+    []
+  );
+
+  useEffect(() => {
+    setProposalData(proposalTemplate);
+    setMessages([
+      // { content: "Can you help me write a proposal?", isUser: true },
+      // { content: "I'll help you write a proposal. To get started, I need some key details:\n1. What type of proposal?\n2. Target organization/donor?\n3. Project focus area?\n4. Approximate budget and timeline?\n5. Your organization's background?", isUser: false }
+    ]);
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) {
+      debouncedPDFUpdate();
+    }
+  }, [isDragging, debouncedPDFUpdate]);
+
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();
     setIsDragging(true);
   }, []);
 
-  // Handle mouse move for dragging
   const handleMouseMove = useCallback((e) => {
     if (!isDragging) return;
     
     const container = e.currentTarget;
     const containerRect = container.getBoundingClientRect();
     const newPosition = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-    
-    // Limit the split position between 20% and 80%
     const limitedPosition = Math.min(Math.max(newPosition, 20), 80);
-    setSplitPosition(limitedPosition);
+    
+    requestAnimationFrame(() => {
+      setSplitPosition(limitedPosition);
+    });
   }, [isDragging]);
 
-  // Handle mouse up to stop dragging
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
 
-  const demoProposal = {
-    title: "Project Proposal: Digital Literacy for Rural Women in Nepal",
-    submittedTo: "The Asia Foundation",
-    date: "January 2, 2025",
-    executive_summary: "This 18-month project aims to empower 5,000 rural women in three districts of Nepal through digital literacy training and economic inclusion. Through established partnerships with local organizations and government bodies, the project will create sustainable digital hubs, provide skills training, and facilitate access to digital financial services. The total budget requested is $275,000."
+  const handleMessageSubmit = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    const newMessages = [...messages, { content: message, isUser: true }];
+    
+    // Search for a matching response in the responses.json file
+    const lowerCaseMessage = message.toLowerCase();
+    const response = responses[lowerCaseMessage] || responses["default"];
+    
+    // Add the response question to the message list
+    newMessages.push({
+      content: response.question,
+      isUser: false
+    });
+
+    // If the response has an action, update the proposal data
+    if (response.action.type) {
+      setProposalData(prev => ({
+        ...prev,
+        ...response.action
+      }));
+    }
+
+    setMessages(newMessages);
+    setMessage('');
   };
+
+  if (!proposalData) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        Loading proposal data...
+      </div>
+    );
+  }
 
   return (
     <div 
-      className="flex h-screen relative"
+      className="flex h-screen relative select-none"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      {/* Left Panel - Chat Interface */}
       <div 
-        className="flex flex-col p-4 overflow-hidden"
+        className="flex flex-col p-4 overflow-hidden transition-[width] duration-75 ease-linear"
         style={{ width: `${splitPosition}%` }}
       >
         <div className="flex items-center mb-6">
@@ -55,24 +128,12 @@ const ProposalGeneration = () => {
         </div>
         
         <div className="flex-1 bg-white rounded-lg shadow-md p-6 mb-4 overflow-y-auto">
-          <div className="mb-4 bg-gray-50 rounded-lg p-4">
-            <p>Can you help me write a proposal?</p>
-          </div>
-          
-          <div className="mb-4 bg-white rounded-lg p-4">
-            <p>I'll help you write a proposal. To get started, I need some key details:</p>
-            <ol className="mt-2 ml-6 list-decimal">
-              <li>What type of proposal? (grant, project, research, etc.)</li>
-              <li>Target organization/donor?</li>
-              <li>Project focus area?</li>
-              <li>Approximate budget and timeline?</li>
-              <li>Your organization's background?</li>
-            </ol>
-            <p className="mt-2">Once you provide these details, I can help craft a tailored proposal.</p>
-          </div>
+          {messages.map((msg, index) => (
+            <Message key={index} {...msg} />
+          ))}
         </div>
         
-        <div className="relative">
+        <form onSubmit={handleMessageSubmit} className="relative">
           <input
             type="text"
             value={message}
@@ -80,17 +141,19 @@ const ProposalGeneration = () => {
             placeholder="I want to write a grant proposal..."
             className="w-full p-4 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:border-gray-400"
           />
-          <button className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+          <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
             ↑
           </button>
-        </div>
+        </form>
       </div>
 
-      {/* Draggable Divider */}
       <div
         className={`absolute top-0 cursor-col-resize select-none h-full w-6 transform -translate-x-1/2 group
           ${isDragging ? 'z-50' : 'z-40'}`}
-        style={{ left: `${splitPosition}%` }}
+        style={{ 
+          left: `${splitPosition}%`,
+          transition: isDragging ? 'none' : 'left 75ms linear'
+        }}
         onMouseDown={handleMouseDown}
       >
         <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-2 rounded-full 
@@ -100,22 +163,19 @@ const ProposalGeneration = () => {
         <div className="absolute left-1/2 w-px h-full bg-gray-200 transform -translate-x-1/2" />
       </div>
 
-      {/* Right Panel - Proposal Preview */}
       <div 
-        className="p-4 bg-white overflow-y-auto"
+        className="bg-white overflow-hidden transition-[width] duration-75 ease-linear"
         style={{ width: `${100 - splitPosition}%` }}
       >
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">{demoProposal.title}</h2>
-          <p className="mb-2">Submitted to: {demoProposal.submittedTo}</p>
-          <p className="mb-4">Date: {demoProposal.date}</p>
-          
-          <h3 className="text-xl font-bold mb-2">Executive Summary</h3>
-          <p className="mb-6">{demoProposal.executive_summary}</p>
-        </div>
+        {!isDragging && <PDFContent key={pdfKey} proposal={proposalData} />}
+        {isDragging && (
+          <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <span className="text-gray-500">Release to update PDF view</span>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProposalGeneration;  
+export default ProposalGeneration;
