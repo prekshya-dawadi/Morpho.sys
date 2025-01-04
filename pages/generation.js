@@ -7,7 +7,7 @@ import proposalTemplate from '../json/proposal-template.json'; // Adjust path ac
 import responses from '../json/responses.json'; // Import responses.json
 
 const PDFContent = dynamic(
-  () => import('../components/PdfContent'),
+  () => import('../components/PDFContent'),
   { 
     ssr: false,
     loading: () => (
