@@ -1,49 +1,79 @@
 {
-  "metadata": {
-    "title": "\\title{Project Proposal: Clean Water Access for Rural Communities in Nepal}",
-    "author": "\\author{Helping Hands Nepal}",
-    "date": "\\date{January 3, 2025}"
-  },
-  "sections": [
-    {
-      "type": "section",
-      "content": "\\section{Executive Summary}",
-      "body": "This 24-month project seeks to provide clean and sustainable water access to 10,000 individuals in rural communities of Nepal. By installing water filtration systems, constructing community wells, and offering hygiene education programs, the project aims to reduce waterborne diseases and improve the overall quality of life. The total budget requested is $350,000."
-    },
-    {
-      "type": "section",
-      "content": "\\section{Background and Need}",
-      "body": "Over 80% of rural communities in Nepal lack access to clean drinking water, leading to widespread waterborne illnesses such as cholera and dysentery. Women and children are disproportionately affected, often walking hours daily to fetch water from unsafe sources. This project addresses these critical challenges through sustainable water solutions."
-    },
-    {
-      "type": "section",
-      "content": "\\section{Objectives}",
-      "body": "\\begin{itemize}\\item Provide clean water access to 10,000 rural residents\\item Install 50 community water filtration systems\\item Educate 5,000 families on hygiene and sanitation practices\\item Establish community-led water management committees\\end{itemize}"
-    },
-    {
-      "type": "section",
-      "content": "\\section{Methodology}",
-      "body": "The project will be implemented in three phases: \\begin{enumerate} \\item \\textbf{Assessment:} Conduct baseline surveys and identify high-need areas. \\item \\textbf{Implementation:} Install water filtration systems, construct wells, and deliver training sessions on hygiene and sanitation. \\item \\textbf{Monitoring and Sustainability:} Establish water management committees and monitor system usage and community impact. \\end{enumerate}"
-    },
-    {
-      "type": "section",
-      "content": "\\section{Expected Outcomes}",
-      "body": "The project aims to achieve the following outcomes: \\begin{itemize}\\item Reduced incidence of waterborne diseases by 50% in target communities. \\item Improved daily access to clean drinking water for 10,000 individuals. \\item Strengthened community capacity to maintain and manage water resources sustainably.\\end{itemize}"
-    },
-    {
-      "type": "section",
-      "content": "\\section{Budget and Timeline}",
-      "body": "The total project budget is $350,000, allocated across infrastructure development, education programs, and operational costs. The project will span 24 months, with quarterly milestones to monitor progress and ensure timely implementation."
-    },
-    {
-      "type": "section",
-      "content": "\\section{Conclusion}",
-      "body": "This project represents a significant step toward achieving sustainable clean water access for rural Nepal. By addressing immediate needs and fostering long-term community engagement, it aims to create lasting health and economic benefits for the target population."
-    },
-    {
-      "type": "section",
-      "content": "\\section{References}",
-      "body": "\\begin{enumerate}\\item World Health Organization, \"Water, Sanitation, and Hygiene,\" 2023.\\item Nepal Government Statistics Office, \"Rural Access to Water Resources,\" 2022.\\item UN Sustainable Development Goals, \"Clean Water and Sanitation,\" Goal 6, 2023.\\end{enumerate}"
-    }
-  ]
+    "title": "Main Section Title",
+    "sectionparagraph": [
+        {
+            "paragraph": "This is the first paragraph of the main section."
+        },
+        {
+            "paragraph": "This is the second paragraph of the main section."
+        }
+    ],
+    "checklist": [
+        {
+            "sentence": "First checklist item.",
+            "checklistcomponent": [
+                {
+                    "checklistno": "1.1"
+                },
+                {
+                    "checklistno": "1.2"
+                }
+            ]
+        },
+        {
+            "sentence": "Second checklist item.",
+            "checklistcomponent": [
+                {
+                    "checklistno": "2.1"
+                },
+                {
+                    "checklistno": "2.2"
+                }
+            ]
+        }
+    ],
+    "subsections": [
+        {
+            "title": "Subsection 1",
+            "paragraph": [
+                {
+                    "paragraph": "This is the first paragraph of subsection 1."
+                },
+                {
+                    "paragraph": "This is the second paragraph of subsection 1."
+                }
+            ],
+            "checklist": [
+                {
+                    "sentence": "Subsection 1 checklist item.",
+                    "checklistcomponent": [
+                        {
+                            "checklistno": "1.1.1"
+                        },
+                        {
+                            "checklistno": "1.1.2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Subsection 2",
+            "paragraph": [
+                {
+                    "paragraph": "This is the first paragraph of subsection 2."
+                }
+            ],
+            "checklist": [
+                {
+                    "sentence": "Subsection 2 checklist item.",
+                    "checklistcomponent": [
+                        {
+                            "checklistno": "2.1.1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

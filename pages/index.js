@@ -105,13 +105,13 @@ export default function Home() {
                   </p>
                   <div className="flex space-x-4 mt-2">
                     <button
-                      className="text-[#41483C] text-sm underline"
+                      className="text-[#41483C] text-sm px-4 py-1 rounded-full border border-[#41483C] bg-transparent hover:underline "
                       onClick={handleRemoveFile}
                     >
                       Remove File
                     </button>
                     <button
-                      className="text-[#41483C] underline text-sm px-4 py-1 rounded-full hover:bg-[#55624C] transition-colors"
+                      className="text-[#41483C] text-sm px-4 py-1 rounded-full border border-[#41483C] bg-transparent hover:underline "
                       onClick={handleStartGeneration}
                     >
                       Start Generating
@@ -128,10 +128,23 @@ export default function Home() {
             {/* Standard Format Section */}
             <div className="w-full flex justify-start items-center justify-center space-x-4">
               <p className="text-sm w-30 font-bold text-gray-600">No template? Try <br /> a standard format:</p>
-              <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
-              <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
-              <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
-              <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
+              <div
+                className="w-16 h-16 bg-white rounded-lg border border-gray-200"
+                style={{ backgroundImage: 'url(/UNDP.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+              ></div>
+              <div
+                className="w-16 h-16 bg-white rounded-lg border border-gray-200"
+                style={{ backgroundImage: 'url(/USAID.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+              ></div>
+              <div
+                className="w-16 h-16 bg-white rounded-lg border border-gray-200"
+                style={{ backgroundImage: 'url(/wbank.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+              ></div>
+              <div
+                className="w-16 h-16 bg-white rounded-lg border border-gray-200"
+                style={{ backgroundImage: 'url(/af.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+              ></div>
+
             </div>
 
             {/* Terms of Service and Privacy Policy */}
