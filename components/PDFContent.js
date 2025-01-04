@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: 'center',
     fontFamily: 'Times-Bold'
   },
@@ -33,34 +33,40 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 12,
     marginBottom: 8,
-    lineHeight: 1.5
+    lineHeight: 1.5,
+    textAlign: 'justify'
   },
-  checklistItem: {
+  bulletContainer: {
     marginLeft: 48,
-    marginBottom: 8,
-    fontSize: 12
+    marginTop: 8,
+    marginBottom: 8
   },
-  subChecklistContainer: {
-    marginLeft: 72,
+  bulletPoint: {
+    flexDirection: 'row',
     marginBottom: 4
   },
-  subChecklistNumber: {
-    marginBottom: 4,
+  bullet: {
+    width: 15,
     fontSize: 12
+  },
+  bulletText: {
+    fontSize: 12,
+    flex: 1
   }
 });
 
-const ChecklistNumbers = ({ components }) => (
-  <View style={styles.subChecklistContainer}>
-    {components.map((component, index) => (
-      <Text key={index} style={styles.subChecklistNumber}>
-        {component.checklistno}
-      </Text>
+const BulletPoints = ({ points }) => (
+  <View style={styles.bulletContainer}>
+    {points.map((point, index) => (
+      <View key={index} style={styles.bulletPoint}>
+        <Text style={styles.bullet}>•</Text>
+        <Text style={styles.bulletText}>{point}</Text>
+      </View>
     ))}
   </View>
 );
 
-const Section = ({ sectionNumber, title, paragraphs, checklist }) => (
+const Section = ({ sectionNumber, title, paragraphs, bulletpoints }) => (
   <View style={styles.sectionContainer}>
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionNumber}>{sectionNumber}</Text>
@@ -69,26 +75,12 @@ const Section = ({ sectionNumber, title, paragraphs, checklist }) => (
     
     {paragraphs && paragraphs.map((p, index) => (
       <Text key={index} style={styles.paragraph}>
-        {p.paragraph}
+        {p}
       </Text>
     ))}
     
-    {checklist && checklist.map((item, index) => (
-      <View key={index}>
-        <Text style={styles.checklistItem}>{item.sentence}</Text>
-        <ChecklistNumbers components={item.checklistcomponent} />
-      </View>
-    ))}
+    {bulletpoints && <BulletPoints points={bulletpoints} />}
   </View>
-);
-
-const MainSection = ({ sectionparagraph, checklist }) => (
-  <Section
-    sectionNumber="1"
-    title="Introduction"
-    paragraphs={sectionparagraph}
-    checklist={checklist}
-  />
 );
 
 const PDFContent = ({ proposal }) => {
@@ -100,20 +92,13 @@ const PDFContent = ({ proposal }) => {
         <Page size="A4" style={styles.page}>
           <Text style={styles.mainTitle}>{proposal.title}</Text>
           
-          {/* Main Section */}
-          <MainSection 
-            sectionparagraph={proposal.sectionparagraph}
-            checklist={proposal.checklist}
-          />
-          
-          {/* Subsections */}
-          {proposal.subsections && proposal.subsections.map((subsection, index) => (
+          {proposal.sections.map((section, index) => (
             <Section
               key={index}
-              sectionNumber={`${index + 2}`}
-              title={subsection.title}
-              paragraphs={subsection.paragraph}
-              checklist={subsection.checklist}
+              sectionNumber={`${index + 1}`}
+              title={section.title}
+              paragraphs={section.paragraph}
+              bulletpoints={section.bulletpoint}
             />
           ))}
         </Page>

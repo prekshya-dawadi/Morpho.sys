@@ -1,13 +1,6 @@
 {
-  "grant proposal": {
-    "question": "Great! For a grant proposal, can you tell me the target organization and funding amount you're seeking?",
-    "action": {
-      "type": "Grant Proposal",
-      "status": "Draft"
-    }
-  },
   "default": {
-    "question": "Could you provide more specific details about your proposal requirements?",
+    "question": "Hi! I'm a bot.",
     "action": {}
   }
 }
