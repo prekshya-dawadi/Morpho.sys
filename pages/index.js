@@ -1,9 +1,53 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const [file, setFile] = useState(null);
+  const router = useRouter();
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      console.log("Selected file:", selectedFile);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+  };
+
+  const handleStartGeneration = async () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            router.push('/generation');
+          } else {
+            alert(data.error || 'Failed to upload file. Please try again.');
+          }
+        } else {
+          alert('Failed to upload file. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      }
+    }
+  };
+
   return (
-    // <div className="min-h-screen bg-gradient-to-b from-[#EFF3EA] to-[#FFFDF0] flex flex-col">
     <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bggg.png')" }}>
       <Head>
         <title>Morpho.sys - From Concept to Grant</title>
@@ -34,18 +78,50 @@ export default function Home() {
             <p className="text-xl font-bold text-[#41483C] mt-4">
               Your AI <span className="bg-[#D9DFC6] px-2">Proposal Partner</span>
             </p>
-            
           </div>
 
           {/* Right Section: Upload Form */}
           <div className="md:w-1/2 flex flex-col items-center space-y-8 mt-40">
             <div className="bg-white bg-opacity-70 backdrop-blur-lg rounded-2xl shadow-lg p-8 w-[450px] h-[280px] flex flex-col justify-center items-center">
-              <button className="w-[280px] bg-[#41483C] text-lg text-white rounded-full py-3 px-1 mb-6">
+              <button
+                className="w-[280px] bg-[#41483C] text-lg text-white rounded-full py-3 px-1 mb-6 hover:bg-[#55624C] hover:scale-105 transition-transform duration-200"
+                onClick={() => document.getElementById('fileInput').click()}
+              >
                 Upload a PDF
               </button>
-              <p className="text-gray-600 text-lg text-center">
+
+              <input
+                type="file"
+                id="fileInput"
+                accept=".pdf"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              {file && (
+                <div className="text-center mt-4">
+                  <p className="text-gray-600 text-lg">
+                    Selected File: {file.name}
+                  </p>
+                  <div className="flex space-x-4 mt-2">
+                    <button
+                      className="text-[#41483C] text-sm underline"
+                      onClick={handleRemoveFile}
+                    >
+                      Remove File
+                    </button>
+                    <button
+                      className="text-[#41483C] underline text-sm px-4 py-1 rounded-full hover:bg-[#55624C] transition-colors"
+                      onClick={handleStartGeneration}
+                    >
+                      Start Generating
+                    </button>
+                  </div>
+                </div>
+              )}
+              <p className="text-gray-600 text-lg text-center mt-4">
                 or drop a file,<br />
-                paste doc or <span className="text - sm underline">URL</span>
+                paste doc or <span className="text-sm underline">URL</span>
               </p>
             </div>
 
@@ -57,11 +133,6 @@ export default function Home() {
               <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
               <div className="w-16 h-16 bg-white rounded-lg border border-gray-200"></div>
             </div>
-
-            {/* Link to Generation Page */}
-            {/* <Link href="/generation" className="text-[#41483C] justify-right items-right text-lg font-medium">
-              Start Generating →
-            </Link>  */}
 
             {/* Terms of Service and Privacy Policy */}
             <p className="text-xs text-gray-500 text-center">
