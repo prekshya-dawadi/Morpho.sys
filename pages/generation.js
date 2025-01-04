@@ -241,7 +241,7 @@ const ProposalGeneration = () => {
       </div>
 
       <div
-        className={`absolute top-0 cursor-col-resize select-none h-full w-6 transform -translate-x-1/2 group
+        className={`absolute top-0 cursor-col-resize select-none h-full w-6 transform -translate-x-1/2 group 
           ${isDragging ? 'z-50' : 'z-40'}`}
         style={{ 
           left: `${splitPosition}%`,
