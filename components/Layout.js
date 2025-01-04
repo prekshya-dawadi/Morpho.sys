@@ -60,11 +60,11 @@ export default function Layout({ children }) {
       </div> */}
 
       {/* Main Content Wrapper */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${isExpanded ? 'ml-64' : 'ml-16'}`}>
+      {/* <div className={`flex-1 flex flex-col transition-all duration-300 ${isExpanded ? 'ml-64' : 'ml-16'}`}>
         {/* Main content area that takes up remaining vertical space */}
         <main className="flex-grow bg-gray-50">
           {children}
-        </main>
+        </main> 
 
         {/* Minimal footer */}
         <footer className="w-full bg-white border-t border-gray-200">
@@ -72,7 +72,7 @@ export default function Layout({ children }) {
             <p className="text-sm text-gray-500">© 2025 morpho.sys. All rights reserved.</p>
           </div>
         </footer>
-      </div>
+      {/* </div> */}
     {/* </div> */}
     </>
   );
