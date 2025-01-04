@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "content": "hello",
+    "isUser": true
+  },
+  {
+    "content": "Hi! I'm a bot.",
+    "isUser": false
+  }
+]
