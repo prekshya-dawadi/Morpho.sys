@@ -6,9 +6,16 @@ export default function Layout({ children }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="min-h-screen flex">
+    <>
+    {/* Header Section
+    <header className="w-full px-8 pt-6">
+      <img src="/morphosys.png" alt="Morpho.sys logo" className="w-auto h-12" />
+      <div className="border-t-2 border-[#41483C] mt-2"></div>
+    </header> */}
+
+    {/* <div className="min-h-screen flex">
       {/* Auto-hiding Sidebar */}
-      <div 
+      {/* <div 
         className={`fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col z-50
           ${isExpanded ? 'w-64' : 'w-16'}`}
         onMouseEnter={() => setIsExpanded(true)}
@@ -23,9 +30,9 @@ export default function Layout({ children }) {
           ) : (
             <ChevronRight className="w-5 h-5 text-gray-500" />
           )}
-        </div>
+        </div> */}
 
-        <nav className="flex-1 py-4">
+        {/* <nav className="flex-1 py-4">
           <ul className="space-y-2">
             <li>
               <Link href="/" className={`flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100
@@ -50,7 +57,7 @@ export default function Layout({ children }) {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
 
       {/* Main Content Wrapper */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${isExpanded ? 'ml-64' : 'ml-16'}`}>
@@ -66,6 +73,7 @@ export default function Layout({ children }) {
           </div>
         </footer>
       </div>
-    </div>
+    {/* </div> */}
+    </>
   );
 }
