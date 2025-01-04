@@ -120,7 +120,7 @@ const ProposalGeneration = () => {
       onMouseLeave={handleMouseUp}
       >
         <div 
-          className="flex flex-col p-4 overflow-hidden transition-[width] duration-75 ease-linear"
+          className="flex flex-col p-4 overflow-hidden transition-[width] duration-75 ease-linear bg-D9DFC6"
           style={{ width: `${splitPosition}%` }}
         >
           <div className="flex items-center mb-6">
@@ -128,13 +128,10 @@ const ProposalGeneration = () => {
             <span className="text-gray-500">Asia Foundation Proposal</span>
           </div>
         
-        <div className="flex-1 bg-white rounded-lg shadow-md p-6 mb-4 overflow-y-auto">
-        <div className="rounded-lg shadow-md flex-1 p-6 mb-4 overflow-y-auto">
+        <div className="flex-1 p-6 mb-4 overflow-y-auto">
           {messages.map((msg, index) => (
             <Message key={index} {...msg} />
-          ))}
-        </div> 
-        
+          ))}        
         
         <form onSubmit={handleMessageSubmit} className="relative">
           <input
